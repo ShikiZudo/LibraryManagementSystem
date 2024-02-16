@@ -18,6 +18,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_id_seq")
     private Long id;
     private String category;
+    public Category(String category){
+        this.category = category;
+    }
 
     @ManyToMany(mappedBy = "categoryList",cascade = CascadeType.ALL)
     private List<Book> bookList;

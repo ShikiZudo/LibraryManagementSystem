@@ -21,12 +21,12 @@ public class Book {
     private String title;
     private String isbn;
     private String authorName;
-    private String publisherName;
-    private String edition;
+    private String publisherName;//
+    private String edition;//
     private String description;
-    private String language;
+    private String language;//
     private int pages;
-    private BigDecimal cost;
+    private BigDecimal cost;//
     private int bookCount;
     private String imageURL;
 
@@ -46,3 +46,4 @@ public class Book {
 
 
 }
+

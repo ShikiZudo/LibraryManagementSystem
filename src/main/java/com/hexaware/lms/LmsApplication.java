@@ -17,49 +17,10 @@ import java.util.logging.Logger;
 @RestController
 public class LmsApplication {
 
-	@Autowired
-	private UserRepository userRepository;
-
-	public final static Logger LOGGER=Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
-	@Autowired
-	private AuthenticationRepository authenticationRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(LmsApplication.class, args);
 	}
 
-	@GetMapping(path = "/deleteUser")
-	@Transactional
-	public void deleteUser(){
-
-//		LOGGER.info(""+authenticationRepository.findById(1L).get().getPassword());
-//		LOGGER.info(""+userRepository.findById(1L).get().getFirstName());
-
-		userRepository.deleteById(1L);
-
-		LOGGER.info(""+authenticationRepository.findById(1L).isPresent());
-		LOGGER.info(""+userRepository.findById(1L).isPresent());
-	}
-
-	@GetMapping(path = "/deleteAuth")
-	@Transactional
-	public void deleteAuth(){
-
-		LOGGER.info(""+authenticationRepository.findById(1L).get().getPassword());
-		LOGGER.info(""+userRepository.findById(1L).get().getFirstName());
-
-		authenticationRepository.deleteById(1L);
-
-//		Optional<Authentication> authenticationOptional = authenticationRepository.findById(1L);
-//
-//		authenticationOptional.ifPresent(authentication -> {
-//			authentication.getUser().setAuthentication(null);
-//			authenticationRepository.deleteById(authentication.getId());
-//		});
-
-		LOGGER.info(""+authenticationRepository.findById(1L).isPresent());
-		LOGGER.info(""+userRepository.findById(1L).isPresent());
-	}
 
 }

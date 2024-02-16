@@ -5,5 +5,5 @@ public enum Gender {
     WOMEN,
     TRANSGENDER,
     NON_BINARY,
-    PREFER_NOT_TO_RESPOND
+    PREFER_NOT_TO_RESPOND;
 }

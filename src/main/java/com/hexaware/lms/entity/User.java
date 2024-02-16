@@ -21,14 +21,14 @@ public class User {
     private String email;
     private String firstName;
     private String lastName;
-    private int contactNo;
+    private String contactNo;
     private String address;
     private int noOfBooksLoan;
 
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
 
-    //foreign key connection
+    //    foreign key connection
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Authentication authentication;
 
@@ -41,3 +41,4 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reservation> reservation;
 }
+

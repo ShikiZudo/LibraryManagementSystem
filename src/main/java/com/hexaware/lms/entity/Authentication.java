@@ -1,34 +1,65 @@
 package com.hexaware.lms.entity;
 
-import com.hexaware.lms.utils.UserRole;
+import com.hexaware.lms.utils.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Entity
+import java.util.Collection;
+
+
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "authentication")
-@Builder
-public class Authentication {
+@Entity
+@Table(name = "_user")
+public class Authentication implements UserDetails {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authentication_id_seq")
-    private Long id;
+    @GeneratedValue
+    private Integer id;
     private String email;
     private String password;
 
-    @Enumerated(value = EnumType.STRING)
-    private UserRole role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @PreRemove
-    private void removeAssociation() {
-        this.user.setAuthentication(null);
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getAuthorities();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

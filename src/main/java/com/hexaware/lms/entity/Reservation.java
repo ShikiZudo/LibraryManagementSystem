@@ -32,3 +32,4 @@ public class Reservation {
     private OffsetDateTime issueTimestamp;
 
 }
+
