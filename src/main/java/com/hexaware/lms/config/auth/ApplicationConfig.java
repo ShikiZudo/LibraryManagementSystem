@@ -1,8 +1,7 @@
-package com.hexaware.lms.config;
+package com.hexaware.lms.config.auth;
 
 import com.hexaware.lms.repository.AuthenticationRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,5 +49,3 @@ public class ApplicationConfig {
         return config.getAuthenticationManager();
     }
 }
-
-

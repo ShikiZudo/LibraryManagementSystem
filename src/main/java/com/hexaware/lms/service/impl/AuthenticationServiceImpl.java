@@ -5,10 +5,13 @@ import com.hexaware.lms.dto.AuthenticationRequest;
 import com.hexaware.lms.dto.AuthenticationResponse;
 import com.hexaware.lms.dto.RegisterRequest;
 import com.hexaware.lms.entity.Authentication;
+import com.hexaware.lms.entity.Token;
 import com.hexaware.lms.entity.User;
 import com.hexaware.lms.repository.AuthenticationRepository;
+import com.hexaware.lms.repository.TokenRepository;
 import com.hexaware.lms.repository.UserRepository;
 import com.hexaware.lms.service.AuthenticationService;
+import com.hexaware.lms.utils.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,11 +23,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private final AuthenticationRepository repository;
+    private final AuthenticationRepository authenticationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
     public AuthenticationResponse register(RegisterRequest request) {
 
         var user = User.builder()
@@ -45,9 +49,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .role(request.getRole())
                 .user(savedUser)
                 .build();
-        repository.save(auth);
+        authenticationRepository.save(auth);
 
         var jwtToken = jwtService.generateToken(auth);
+
+        revokeAllUserTokens(auth);
+        saveUserToken(auth,jwtToken);
 
         return AuthenticationResponse
                 .builder()
@@ -76,12 +83,36 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // and then match it with the password provided by above .authenticate() method. If they match then the code flow will continue
         // otherwise it will be stopped and a 400-series status code will be given.
 
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        var auth = authenticationRepository.findByEmail(request.getEmail()).orElseThrow();
+        var jwtToken = jwtService.generateToken(auth);
+
+        revokeAllUserTokens(auth);
+        saveUserToken(auth,jwtToken);
 
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)
                 .build();
+    }
+    private void revokeAllUserTokens(Authentication auth) {
+        var validUserTokens = tokenRepository.findAllValidTokenByAuth(auth.getId());
+        if (validUserTokens.isEmpty())
+            return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
+    }
+
+    private void saveUserToken(Authentication auth, String jwtToken) {
+        var token = Token.builder()
+                .user(auth)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .revoked(false)
+                .expired(false)
+                .build();
+        tokenRepository.save(token);
     }
 }

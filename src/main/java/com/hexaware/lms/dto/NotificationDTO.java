@@ -1,21 +1,19 @@
-package com.hexaware.lms.entity;
+package com.hexaware.lms.dto;
 
+import com.hexaware.lms.entity.User;
 import com.hexaware.lms.utils.NotificationType;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "notification")
+@NoArgsConstructor
 @Builder
-public class Notification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_id_seq")
+public class NotificationDTO {
     private Long id;
     private String message;
     private boolean seen;
@@ -23,8 +21,5 @@ public class Notification {
     @Enumerated(value = EnumType.STRING)
     private NotificationType type;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-
 }

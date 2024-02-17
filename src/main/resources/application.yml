@@ -12,5 +12,5 @@ spring:
     properties:
       hibernate:
         format_sql: ture
-    database: postgresql
+    database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
