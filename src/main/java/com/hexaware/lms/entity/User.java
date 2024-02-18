@@ -28,17 +28,5 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
 
-    //    foreign key connection
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Authentication authentication;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Notification> notification;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Loan> loan;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Reservation> reservation;
 }
 

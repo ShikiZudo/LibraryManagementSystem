@@ -1,5 +1,8 @@
-package com.hexaware.lms.entity;
+package com.hexaware.lms.dto;
 
+import com.hexaware.lms.entity.Category;
+import com.hexaware.lms.entity.Loan;
+import com.hexaware.lms.entity.Reservation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "book")
 @Builder
-public class Book {
+public class BookDto {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_id_seq")
     private Long id;
@@ -30,13 +33,7 @@ public class Book {
     private int bookCount;
     private String imageURL;
 
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="book_category_mapping",
-            joinColumns = @JoinColumn(name="book_id"),
-            inverseJoinColumns = @JoinColumn(name ="category_id"))
-    private List<Category> categoryList ;
-
+    //private List<Category> categoryList ;
 
 }
 
