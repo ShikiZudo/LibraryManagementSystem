@@ -7,12 +7,14 @@ import com.hexaware.lms.dto.RegisterRequest;
 import com.hexaware.lms.entity.Authentication;
 import com.hexaware.lms.entity.Token;
 import com.hexaware.lms.entity.User;
+import com.hexaware.lms.exception.ResourceNotFoundException;
 import com.hexaware.lms.repository.AuthenticationRepository;
 import com.hexaware.lms.repository.TokenRepository;
 import com.hexaware.lms.repository.UserRepository;
 import com.hexaware.lms.service.AuthenticationService;
 import com.hexaware.lms.utils.TokenType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationRepository authenticationRepository;
@@ -30,6 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     public AuthenticationResponse register(RegisterRequest request) {
+        log.debug("entered AuthenticationServiceImpl.register() service with args: {}",request.toString());
 
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -56,45 +60,40 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         revokeAllUserTokens(auth);
         saveUserToken(auth,jwtToken);
 
-        return AuthenticationResponse
+        AuthenticationResponse authenticationResponse = AuthenticationResponse
                 .builder()
                 .token(jwtToken)
                 .build();
+
+        log.debug("exiting AuthenticationServiceImpl.register() service with return data: {}", authenticationResponse.toString());
+        return authenticationResponse;
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws ResourceNotFoundException {
+        log.debug("entered AuthenticationServiceImpl.authenticate() service with args: {}",request.toString());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        // above .authenticate() method will call this authentication provider in applicationConfig.java file -
 
-//        public AuthenticationProvider authenticationProvider(){
-//            DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//            authProvider.setUserDetailsService(userDetailsService());
-//            authProvider.setPasswordEncoder(passwordEncoder());
-//            return authProvider;
-//        }
+        var auth = authenticationRepository.findByEmail(request.getEmail());
+        if(auth.isEmpty()) throw new ResourceNotFoundException("authentication","email",request.getEmail());
+        var jwtToken = jwtService.generateToken(auth.get());
 
-        // which has our user details(userDetailsService()) from database and password encoder(as password in db is in encoded form)
-        // now it will decode the password from database(as it is stored in encoded form. see register method authentication obj)
-        // and then match it with the password provided by above .authenticate() method. If they match then the code flow will continue
-        // otherwise it will be stopped and a 400-series status code will be given.
-
-        var auth = authenticationRepository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(auth);
-
-        revokeAllUserTokens(auth);
-        saveUserToken(auth,jwtToken);
-
-        return AuthenticationResponse
+        revokeAllUserTokens(auth.get());
+        saveUserToken(auth.get(),jwtToken);
+        AuthenticationResponse authenticationResponse =  AuthenticationResponse
                 .builder()
                 .token(jwtToken)
                 .build();
+
+        log.debug("exiting AuthenticationServiceImpl.authenticate() service with return data: {}", authenticationResponse.toString());
+        return authenticationResponse;
     }
     private void revokeAllUserTokens(Authentication auth) {
+        log.debug("entered AuthenticationServiceImpl.revokeAllUserTokens() service with args: {}",auth.toString());
         var validUserTokens = tokenRepository.findAllValidTokenByAuth(auth.getId());
         if (validUserTokens.isEmpty())
             return;
@@ -103,9 +102,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             token.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
+
+        log.debug("exiting AuthenticationServiceImpl.revokeAllUserTokens() service ");
     }
 
     private void saveUserToken(Authentication auth, String jwtToken) {
+        log.debug("entered AuthenticationServiceImpl.revokeAllUserTokens() service with args: {} and {}",auth.toString(),jwtToken);
         var token = Token.builder()
                 .user(auth)
                 .token(jwtToken)
@@ -114,5 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .expired(false)
                 .build();
         tokenRepository.save(token);
+
+        log.debug("exiting AuthenticationServiceImpl.revokeAllUserTokens() service ");
     }
 }

@@ -24,6 +24,4 @@ public class Category {
 
     @ManyToMany(mappedBy = "categoryList",cascade = CascadeType.ALL)
     private List<Book> bookList;
-
-
 }
