@@ -1,8 +1,6 @@
 package com.hexaware.lms.service;
 
-import com.hexaware.lms.dto.AddCategoryRequestBody;
-import com.hexaware.lms.dto.CategoryDTO;
-import com.hexaware.lms.dto.NotificationDTO;
+import com.hexaware.lms.dto.*;
 import com.hexaware.lms.exception.ResourceNotFoundException;
 
 import java.util.List;
@@ -15,5 +13,15 @@ public interface AdminService {
     void deleteCategory(long id) throws ResourceNotFoundException;
 
 
-    NotificationDTO sendReturnRequest(NotificationDTO notificationDTO) throws ResourceNotFoundException;
+    NotificationDTO sendReturnRequest(NotificationDTO notificationDTO, long id) throws ResourceNotFoundException;
+
+    List<BookLoanHistoryDTO> getBookLoanHistory(long bookId) throws ResourceNotFoundException;
+
+    List<BookReservationHistoryDTO> getBookReservationHistory(long bookId) throws ResourceNotFoundException;
+
+    List<UserLoanHistoryDTO> getUserLoanHistory(long userId) throws ResourceNotFoundException;
+
+    List<fineDTO> getUserFine(long userId) throws ResourceNotFoundException;
+
+    List<fineDTO> getTotalFine() throws ResourceNotFoundException;
 }

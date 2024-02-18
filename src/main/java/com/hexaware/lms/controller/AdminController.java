@@ -1,11 +1,8 @@
 package com.hexaware.lms.controller;
 
-import com.hexaware.lms.dto.AddCategoryRequestBody;
-import com.hexaware.lms.dto.CategoryDTO;
-import com.hexaware.lms.dto.NotificationDTO;
+import com.hexaware.lms.dto.*;
 import com.hexaware.lms.exception.ResourceNotFoundException;
 import com.hexaware.lms.service.AdminService;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,25 +45,6 @@ public class AdminController {
         return "GET:: admin controller";
     }
 
-    @PostMapping
-    @PreAuthorize("hasAuthority('admin:create')")
-    @Hidden //to hide from swagger
-    public String post() {
-        return "POST:: admin controller";
-    }
-
-    @PutMapping
-    @PreAuthorize("hasAuthority('admin:update')")
-
-    public String put() {
-        return "PUT:: admin controller";
-    }
-
-    @DeleteMapping
-    @PreAuthorize("hasAuthority('admin:delete')")
-    public String delete() {
-        return "DELETE:: admin controller";
-    }
 
     // needed to be corrected
     @GetMapping(path = "/getCategory")
@@ -78,27 +56,108 @@ public class AdminController {
 
     //needed to be corrected
     @PostMapping(path = "/addCategory")
-    public ResponseEntity<CategoryDTO> addCategory(@RequestBody AddCategoryRequestBody request){
+    public ResponseEntity<CategoryDTO> addCategory(
+            @RequestBody AddCategoryRequestBody request
+    ){
         CategoryDTO response = adminService.addCategory(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     @DeleteMapping(path = "/deleteCategory/{id}")
-    public ResponseEntity deleteCategory(@PathVariable("id") long id ) throws ResourceNotFoundException {
+    public ResponseEntity deleteCategory(
+            @PathVariable("id") long id
+    ) throws ResourceNotFoundException {
         try {
             adminService.deleteCategory(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ResourceNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping(path = "/returnRequest")
-    public ResponseEntity<NotificationDTO> returnRequest(@RequestBody NotificationDTO notificationDTO) throws ResourceNotFoundException {
+    @PostMapping(path = "/returnRequest/{id}")
+    public ResponseEntity<NotificationDTO> returnRequest(
+            @RequestBody NotificationDTO notificationDTO,
+            @PathVariable("id") long id
+    ) throws ResourceNotFoundException {
         try{
-            NotificationDTO savedDto = adminService.sendReturnRequest(notificationDTO);
+            NotificationDTO savedDto = adminService.sendReturnRequest(notificationDTO, id);
             return new ResponseEntity(savedDto,HttpStatus.OK);
         } catch (ResourceNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping(path = "/bookLoanHistory/{bookId}")
+    public ResponseEntity<List<BookLoanHistoryDTO>> bookLoanHistory(
+            @PathVariable("bookId") long bookId
+    ) throws ResourceNotFoundException {
+        try{
+            List<BookLoanHistoryDTO> bookLoanHistoryList = adminService.getBookLoanHistory(bookId);
+            return new ResponseEntity<>(bookLoanHistoryList,HttpStatus.OK);
+        }catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/bookReservationHistory/{bookId}")
+    public ResponseEntity<List<BookReservationHistoryDTO>> bookReservationHistory(
+            @PathVariable("bookId") long bookId
+    ) throws ResourceNotFoundException {
+        try{
+            List<BookReservationHistoryDTO> bookLoanHistoryList = adminService.getBookReservationHistory(bookId);
+            return new ResponseEntity<>(bookLoanHistoryList,HttpStatus.OK);
+        }catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/userLoanHistory/{userId}")
+    public ResponseEntity<List<UserLoanHistoryDTO>> userLoanHistory(
+            @PathVariable("userId") long userId
+    ) throws ResourceNotFoundException {
+        try{
+            List<UserLoanHistoryDTO> userLoanHistoryList = adminService.getUserLoanHistory(userId);
+            return new ResponseEntity<>(userLoanHistoryList,HttpStatus.OK);
+        }catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/userFine/{userId}")
+    public ResponseEntity<List<fineDTO>> userFine(
+            @PathVariable("userId") long userId
+    ) throws ResourceNotFoundException {
+        try{
+            List<fineDTO> userFineList = adminService.getUserFine(userId);
+            return new ResponseEntity<>(userFineList,HttpStatus.OK);
+        }catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/totalFine")
+    public ResponseEntity<List<fineDTO>> totalFine(
+    ) throws ResourceNotFoundException {
+        try{
+            List<fineDTO> userFineList = adminService.getTotalFine();
+            return new ResponseEntity<>(userFineList,HttpStatus.OK);
+        }catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

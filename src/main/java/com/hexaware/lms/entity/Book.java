@@ -30,13 +30,6 @@ public class Book {
     private int bookCount;
     private String imageURL;
 
-    //foreign key reservation constraint
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Reservation> reservation;
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Loan> loan;
-
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="book_category_mapping",
