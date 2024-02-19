@@ -22,6 +22,4 @@ public class Category {
         this.category = category;
     }
 
-    @ManyToMany(mappedBy = "categoryList",cascade = CascadeType.ALL)
-    private List<Book> bookList;
 }
