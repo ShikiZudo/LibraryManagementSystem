@@ -23,6 +23,8 @@ public class Loan {
     @CreationTimestamp
     private OffsetDateTime issueDate;
 
+    private OffsetDateTime returnDate;
+
     @Enumerated(value = EnumType.STRING)
     private LoanStatus status;
 

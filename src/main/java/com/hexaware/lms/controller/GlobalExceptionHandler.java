@@ -31,7 +31,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 				LocalDateTime.now(),
 				ex.getMessage(),
 				w.getDescription(false),
-				"PRODUCT_NOT_FOUND");
+				"OBJECT_NOT_FOUND");
 
 		return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
 	}
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 				LocalDateTime.now(),
 				ex.getMessage(),
 				w.getDescription(false),
-				"PRODUCT_NAME_ALREADY_EXISTS");
+				"OBJECT_NAME_ALREADY_EXISTS");
 
 		return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
 	}

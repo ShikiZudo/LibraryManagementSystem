@@ -18,6 +18,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_id_seq")
     private Long id;
     private String message;
+    private boolean seen;
 
     @Enumerated(value = EnumType.STRING)
     private NotificationType type;
