@@ -29,15 +29,4 @@ public class Book {
     private BigDecimal cost;//
     private int bookCount;
     private String imageURL;
-
-
-
-
-
 }
-
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name="book_category_mapping",
-//            joinColumns = @JoinColumn(name="book_id"),
-//            inverseJoinColumns = @JoinColumn(name ="category_id"))
-//    private List<Category> categoryList ;

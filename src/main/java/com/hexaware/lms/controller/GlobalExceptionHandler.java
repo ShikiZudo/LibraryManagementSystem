@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hexaware.lms.exception.AmountInsufficientException;
 import com.hexaware.lms.exception.ErrorDetails;
 import com.hexaware.lms.exception.NameAlreadyExistsException;
 import com.hexaware.lms.exception.ResourceNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -22,10 +24,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<ErrorDetails> handleCustomException(ResourceNotFoundException ex, WebRequest w){
+	public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest w){
 
 		ErrorDetails e = new ErrorDetails(
 				LocalDateTime.now(),
@@ -36,8 +39,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(AmountInsufficientException.class)
+	public ResponseEntity<ErrorDetails> handleAmountInsufficientException(AmountInsufficientException ex, WebRequest w){
+		ErrorDetails e = new ErrorDetails(
+				LocalDateTime.now(),
+				ex.getMessage(),
+				w.getDescription(false),
+				"PAYMENT_INSUFFICIENT_EXCEPTION");
+
+		return new ResponseEntity<>(e, HttpStatus.PAYMENT_REQUIRED);
+	}
+
 	@ExceptionHandler(NameAlreadyExistsException.class)
-	public ResponseEntity<ErrorDetails> handleCustomException(NameAlreadyExistsException ex, WebRequest w){
+	public ResponseEntity<ErrorDetails> handleNameAlreadyExistsException(NameAlreadyExistsException ex, WebRequest w){
 
 		ErrorDetails e = new ErrorDetails(
 				LocalDateTime.now(),

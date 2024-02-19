@@ -113,7 +113,7 @@ public class BookController {
 
     //book partial update
     @PatchMapping(path="/books/{id}")
-    public ResponseEntity<BookDto> partialUpdate(@PathVariable("id") @NotNull Long id,@NotNull @RequestBody BookDto bookDto) throws ResourceNotFoundException{
+    public ResponseEntity<BookDto> partialUpdate(@PathVariable("id") @NotNull Long id, @NotNull @RequestBody BookDto bookDto) throws ResourceNotFoundException{
 
         log.debug("Entered partialUpdatebook() controller.");
         log.info("Request recieved: api/v1/book/books/{id}");

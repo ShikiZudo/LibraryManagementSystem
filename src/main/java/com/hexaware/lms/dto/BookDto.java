@@ -1,16 +1,14 @@
 package com.hexaware.lms.dto;
 
-import com.hexaware.lms.entity.Category;
-import com.hexaware.lms.entity.Loan;
-import com.hexaware.lms.entity.Reservation;
+
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @Data
@@ -44,4 +42,3 @@ public class BookDto {
     //private List<Long> categoryIdList ;
 
 }
-

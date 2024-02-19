@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class CategoryDTO {
-
     private Long id;
     private String category;
     private List<Book> bookList;

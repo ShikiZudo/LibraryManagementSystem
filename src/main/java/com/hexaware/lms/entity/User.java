@@ -18,6 +18,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
     private Long id;
+    @Column(unique = true)
     private String email;
     private String firstName;
     private String lastName;
@@ -27,6 +28,5 @@ public class User {
 
     @Enumerated(value = EnumType.STRING)
     private Gender gender;
-
 }
 

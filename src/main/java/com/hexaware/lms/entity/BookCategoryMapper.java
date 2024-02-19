@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BookCategoryMapper {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_category_id_seq")
     private Long id;
 
     @ManyToOne
@@ -23,4 +24,5 @@ public class BookCategoryMapper {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
+
 }

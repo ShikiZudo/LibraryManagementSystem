@@ -2,9 +2,7 @@ package com.hexaware.lms.service;
 
 import com.hexaware.lms.dto.BookDto;
 import com.hexaware.lms.entity.Book;
-import com.hexaware.lms.entity.Category;
 import com.hexaware.lms.exception.ResourceNotFoundException;
-import org.springframework.http.ResponseEntity;
 
 
 import java.util.List;

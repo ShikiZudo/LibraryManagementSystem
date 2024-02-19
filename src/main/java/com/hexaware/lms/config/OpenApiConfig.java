@@ -13,12 +13,12 @@ import io.swagger.v3.oas.annotations.servers.Server;
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
-                        name = "Alibou",
-                        email = "contact@aliboucoding.com",
-                        url = "https://aliboucoding.com/course"
+                        name = "LMS",
+                        email = "tiwarirahul0809.com",
+                        url = "https://rahu.com/course"
                 ),
-                description = "OpenApi documentation for Spring Security",
-                title = "OpenApi specification - Alibou",
+                description = "LMS documentation for api endpoints",
+                title = "OpenApi specification - Rahul",
                 version = "1.0",
                 license = @License(
                         name = "Licence name",
