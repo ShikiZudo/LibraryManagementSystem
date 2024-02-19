@@ -2,7 +2,7 @@ package com.hexaware.lms.controller;
 
 import com.hexaware.lms.dto.AuthenticationRequest;
 import com.hexaware.lms.dto.AuthenticationResponse;
-import com.hexaware.lms.dto.RegisterRequest;
+import com.hexaware.lms.dto.RegisterRequestDTO;
 import com.hexaware.lms.exception.ResourceNotFoundException;
 import com.hexaware.lms.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
+            @RequestBody RegisterRequestDTO request
     ){
         log.debug("entered register() controller");
         log.info("Request received: {} - {}", "register()", "/api/v1/auth/register");

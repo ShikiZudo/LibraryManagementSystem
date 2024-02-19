@@ -6,6 +6,7 @@ import com.hexaware.lms.dto.SubmitBookDTO;
 import com.hexaware.lms.exception.AmountInsufficientException;
 import com.hexaware.lms.exception.ResourceNotFoundException;
 import com.hexaware.lms.service.UserService;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class UserController {
 
     @GetMapping(path = "/userLoanHistory/{userId}")
     public ResponseEntity<List<UserLoanHistoryDTO>> userLoanHistory(
-            @PathVariable("userId") long userId
+            @PathVariable("userId")@NotNull long userId
     ) throws ResourceNotFoundException {
         log.debug("entered userLoanHistory() controller");
         log.info("Request received: {} - {}", "userLoanHistory()", "/api/v1/user/userLoanHistory/{userId}");
@@ -45,7 +46,7 @@ public class UserController {
 
     @GetMapping(path = "/userFine/{userId}")
     public ResponseEntity<List<fineDTO>> userFine(
-            @PathVariable("userId") long userId
+            @PathVariable("userId")@NotNull long userId
     ) throws ResourceNotFoundException {
         log.debug("entered userFine() controller");
         log.info("Request received: {} - {}", "userFine()", "/api/v1/user/userFine/{userId}");
@@ -65,7 +66,7 @@ public class UserController {
 
     @PutMapping(path = "/setStatusLost/{loanId}")
     public ResponseEntity setStatusLost(
-            @PathVariable("loanId") long loanId
+            @PathVariable("loanId")@NotNull long loanId
     ) throws ResourceNotFoundException,IllegalArgumentException {
         log.debug("entered setStatusLost() controller");
         log.info("Request received: {} - {}", "setStatusLost()", "/api/v1/user/setStatusLost/{loanId}");
@@ -89,7 +90,7 @@ public class UserController {
 
     @PostMapping(path = "/submitBook/{loanId}")
     public ResponseEntity<SubmitBookDTO> submitBook(
-            @PathVariable("loanId") long loanId,
+            @PathVariable("loanId")@NotNull long loanId,
             @RequestParam(name = "fineAmount") long fineAmount
     ) throws ResourceNotFoundException, AmountInsufficientException {
         log.debug("entered submitBook() controller");

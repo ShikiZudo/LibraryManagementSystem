@@ -1,8 +1,8 @@
 package com.hexaware.lms.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import com.hexaware.lms.utils.Gender;
+import com.hexaware.lms.utils.Role;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class RegisterRequestDTO {
 
     @Email(message = "Please provide a valid email address")
     private String email;
@@ -25,5 +25,19 @@ public class AuthenticationRequest {
 //            @Pattern(regexp = ".*\\d.*", message = "Password must contain at least one digit"),
 //            @Pattern(regexp = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\",.<>/?].*", message = "Password must contain at least one special character")
 //    })
-    String password;
+    private String password;
+    @NotBlank(message = "role cannot be blank")
+    private Role role;
+    @Size(max = 30, min = 3, message = "Invalid firstName. Size should be between 3 to 30.")
+    private String firstName;
+    @Size(max = 30, min = 3, message = "Invalid lastName. Size should be between 3 to 30.")
+    private String lastName;
+    @Size(max = 14, min = 9, message = "Invalid contactNo. Size should be between 9 to 14.")
+    private String contactNo;
+    @Size(max = 50, min = 10, message = "Invalid lastName. Size should be between 10 to 50.")
+    private String address;
+    @NotNull
+    private int noOfBooksLoan;
+    @NotNull
+    private Gender gender;
 }

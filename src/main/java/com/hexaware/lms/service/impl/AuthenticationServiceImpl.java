@@ -3,7 +3,7 @@ package com.hexaware.lms.service.impl;
 import com.hexaware.lms.config.auth.JwtService;
 import com.hexaware.lms.dto.AuthenticationRequest;
 import com.hexaware.lms.dto.AuthenticationResponse;
-import com.hexaware.lms.dto.RegisterRequest;
+import com.hexaware.lms.dto.RegisterRequestDTO;
 import com.hexaware.lms.entity.Authentication;
 import com.hexaware.lms.entity.Token;
 import com.hexaware.lms.entity.User;
@@ -32,7 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequestDTO request) {
         log.debug("entered AuthenticationServiceImpl.register() service with args: {}",request.toString());
 
         var user = User.builder()

@@ -6,6 +6,8 @@ import com.hexaware.lms.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,30 +25,22 @@ import java.util.List;
 @Tag(name = "Admin")
 @Slf4j
 public class AdminController {
-
     private final AdminService adminService;
+        @Operation(
+            description = "getCategory - Get endpoint for admin",
+            summary = "This endpoint is used to ge all the available categories present.",
+            responses = {
+                    @ApiResponse(
+                            description = "Success",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized / Invalid Token",
+                            responseCode = "403"
+                    )
+            }
 
-//    @Operation(
-//            description = "Get endpoint for admin",
-//            summary = "This is a summary for admin get endpoint",
-//            responses = {
-//                    @ApiResponse(
-//                            description = "Success",
-//                            responseCode = "200"
-//                    ),
-//                    @ApiResponse(
-//                            description = "Unauthorized / Invalid Token",
-//                            responseCode = "403"
-//                    )
-//            }
-//
-//    )
-//    @GetMapping
-//    @PreAuthorize("hasAuthority('admin:read')")
-//    public String get() {
-//        return "GET:: admin controller";
-//    }
-
+    )
     @GetMapping(path = "/getCategory")
     public ResponseEntity<List<CategoryDTO>> getCategory() throws FileNotFoundException {
         log.debug("entered /getCategory() controller");
@@ -88,7 +82,7 @@ public class AdminController {
     @PostMapping(path = "/returnRequest/{id}")
     public ResponseEntity<NotificationDTO> returnRequest(
             @RequestBody NotificationDTO notificationDTO,
-            @PathVariable("id") long id
+            @PathVariable("id") @NotNull long id
     ) throws ResourceNotFoundException {
         log.debug("entered returnRequest() controller");
         log.info("Request received: {} - {}", "returnRequest()", "/api/v1/admin/returnRequest/{id}");
@@ -108,8 +102,9 @@ public class AdminController {
 
     @GetMapping(path = "/bookLoanHistory/{bookId}")
     public ResponseEntity<List<BookLoanHistoryDTO>> bookLoanHistory(
-            @PathVariable("bookId") long bookId
+            @PathVariable("bookId")@NotNull long bookId
     ) throws ResourceNotFoundException {
+
         log.debug("entered bookLoanHistory() controller");
         log.info("Request received: {} - {}", "bookLoanHistory()", "/api/v1/admin/bookLoanHistory/{bookId}");
         try{
@@ -128,8 +123,9 @@ public class AdminController {
 
     @GetMapping(path = "/bookReservationHistory/{bookId}")
     public ResponseEntity<List<BookReservationHistoryDTO>> bookReservationHistory(
-            @PathVariable("bookId") long bookId
+            @PathVariable("bookId") @NotNull long bookId
     ) throws ResourceNotFoundException {
+
         log.debug("entered bookReservationHistory() controller");
         log.info("Request received: {} - {}", "bookReservationHistory()", "/api/v1/admin/bookReservationHistory/{bookId}");
         try{
@@ -148,7 +144,7 @@ public class AdminController {
 
     @GetMapping(path = "/userLoanHistory/{userId}")
     public ResponseEntity<List<UserLoanHistoryDTO>> userLoanHistory(
-            @PathVariable("userId") long userId
+            @PathVariable("userId") @NotNull long userId
     ) throws ResourceNotFoundException {
         log.debug("entered userLoanHistory() controller");
         log.info("Request received: {} - {}", "userLoanHistory()", "/api/v1/admin/userLoanHistory/{userId}");
@@ -168,7 +164,7 @@ public class AdminController {
 
     @GetMapping(path = "/userFine/{userId}")
     public ResponseEntity<List<fineDTO>> userFine(
-            @PathVariable("userId") long userId
+            @PathVariable("userId") @NotNull long userId
     ) throws ResourceNotFoundException {
         log.debug("entered userFine() controller");
         log.info("Request received: {} - {}", "userFine()", "/api/v1/admin/userFine/{userId}");
