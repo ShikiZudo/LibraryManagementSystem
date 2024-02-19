@@ -3,6 +3,8 @@ package com.hexaware.lms.service;
 import com.hexaware.lms.dto.BookDto;
 import com.hexaware.lms.entity.Book;
 import com.hexaware.lms.entity.Category;
+import com.hexaware.lms.exception.ResourceNotFoundException;
+import org.springframework.http.ResponseEntity;
 
 
 import java.util.List;
@@ -14,19 +16,23 @@ public interface BookService {
 
     List<BookDto> findAll();
 
-     BookDto findOne(Long id);
+     BookDto findOne(Long id) throws ResourceNotFoundException;
 
     boolean isExists(Long id);
 
-    BookDto partialUpdate(Long id, BookDto bookEntity);
+    BookDto partialUpdate(Long id, BookDto bookEntity) throws ResourceNotFoundException;
 
-    void delete(Long id);
-    List<Book> searchBarBook( String search);
+    void delete(Long id) throws ResourceNotFoundException;
 
-    List<Optional<Book>> searchByAuthor(String authorName);
 
-    List<Optional<Book>> searchByLanguage(String language);
 
-    List<Book> findByCategory(String search);
+    Optional<List<Book>> searchBarBook(String search) throws ResourceNotFoundException;
 
+    Optional<List<Book>> searchByAuthor(String authorName) throws ResourceNotFoundException;
+
+    Optional<List<Book>> searchByLanguage(String language) throws ResourceNotFoundException;
+
+    Optional<List<Book>> findByCategory(String search) throws ResourceNotFoundException;
+
+    BookDto fullUpdate(BookDto bookDto, Long id);
 }

@@ -18,17 +18,18 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             + "OR b.description LIKE CONCAT('%', :query, '%')")
     List<Book> searchBook(String query);
 
-
     //get book by author
-    public List<Optional<Book>> findByAuthorName(String author);
+    public Optional<List<Book>> findByAuthorName(String author);
 
     //get book by language
-    public List<Optional<Book>> findByLanguage(String language);
+    public Optional<List<Book>> findByLanguage(String language);
 
     //get book by category
     //@Query("SELECT DISTINCT b FROM Book b JOIN b.categories c WHERE c.category = :searchCategory")
     //public List<Book> searchCategory(String searchCategory);
-    @Query("SELECT DISTINCT b FROM Book b JOIN b.categoryList c WHERE c.category = ?1")
-    List<Book> findByCategory(String categoryName);
+    //@Query("SELECT DISTINCT b FROM Book b JOIN b.categoryList c WHERE c.category = ?1")
+
+    @Query("SELECT bm.book FROM BookCategoryMapper bm JOIN bm.category c WHERE c.category = ?1")
+    Optional<List<Book>> findByCategory(String categoryName);
 
 }
